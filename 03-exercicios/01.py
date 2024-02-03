@@ -1,7 +1,7 @@
 perguntas = ['Telefonou para a vítima? (S / N): ','Esteve no local do crime: (S / N) ', 'Mora perto da vítima?: (S / N) ', 'Devia para a vítima?: (S / N) ', 'Já trabalhou a vítima?:  (S / N)' ]
 
 respostaPositiva = []
-
+    
 for pergunta in perguntas:
     resposta = input(pergunta + ' ').upper()
     if resposta == 'S':
