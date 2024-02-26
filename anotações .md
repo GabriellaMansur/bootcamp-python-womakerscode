@@ -1,3 +1,443 @@
+# Apostila de Python
+
+## Conceitos básicos
+* Imprimir na tela
+```python
+print('Olá, mundo')
+```
+* Entrada
+```python
+numero_inteiro = int(input('Digite um número inteiro: '))
+```
+
+## Estruturas condicionais
+* Os operadores condicionais são: `if`, `elif` e `else`
+    * Sintaxe if else:
+    ```python 
+    if(condicao é `True`):
+        operacoes
+    elif(condicao é `True`):
+        operacoes
+    else:
+        operacoes
+    ```
+
+## Laços de repetição
+* `while`:
+    * Sintaxe:
+    ```python 
+    while (condicao é `True`):
+        operacao_repetida
+    ```
+    * Exemplo 1:
+    ```python
+    cont = 1
+    while cont <= 5:
+        print('Olá, mundo')
+        cont += 1
+    ```
+    * Exemplo 2: enquanto o usuário não digitar o que pe solicitado, continuamos pedindo para ele digitar um novo valor
+    ```python
+    numero = float(input('Digite um número maior que 77: '))
+    while numero <= 77:
+        numero = float(input('Número menor ou igual a 77. Digite um número maior que 77: '))
+    print('Legal, o número digitado foi', numero)
+    ```
+
+
+## Listas
+* Problema gerador: a média de um aluno, a partir das notas informadas por ele.
+* Listas são uma estrutura de dados definidas como um **conjunto de objetos** que podem ser de diversos tipos. Veja abaixo um exemplo de como são declaradas:
+```python 
+lista_numeros = [2, 4, 3, 8, 13]
+lista_strings = ['Banana', 'Maçã', 'Uva', 'Manga']
+lista_num_strings = [1, 'José', -7]
+lista_de_listas = [5, 13, [7, 5], True]
+```
+* Para acessar elementos específicos de um listas, devemos indicar qual é o **índice** respectivo ao elemento, ou seja, qual pe a posição do elemento dentro da lista. Esse processo é chamado de **indexação**. 
+
+```python
+minha_lista = ["a", "b", "c"]
+
+#para acessar uma posição i da lista:
+minha_lista[i]
+```
+* Também é possível acessar os últimos elemento de uma lista usando índices negativos
+    * Último elemento tem índice -1: `minha_lista[-1]`
+    * Penúltimo tenm índice -2: `minha_lista[-2]`
+    * E assim por diante
+* Acessando pedaços da lista (isso é chamado de *slicing* em Python), basta indicar o intervalo de índices separados por `:` (o intervalo é aberto). Veja:
+    * `minha_lista[1:3]` => seleciona sos elementos de índice 1 até  índice 2
+    * `minha_lista[:4]` =>  primeiro elemento até o índice 3
+    * `minha_lista[3:]` => índice 3 até o final 
+    * `minha_lista[:]` => seleciona toda a lista
+### Operações com listas
+* Soma 
+    * Ao somar, os elementos são concatenados, na ordem dada, para formar uma lista maior
+    ```python
+        lista1 = [1, 2, 3]
+        lista2 = [4, 5, 6]
+
+        lista3 = lista1 + lista2
+
+        # lista 3 = 1, 2, 3, 4, 5, 6
+    ```
+* Multiplicação 
+    * Ao multiplicar uma liats por um número inteiro os elementos são repetidos na ordem em que aparecem:
+    ```python
+        lista1 * 3
+
+        #lista1 = 1, 2, 3, 1, 2, 3, 1, 2, 3,
+    ```
+
+* Strings = > lista de caracteres
+    ```python
+        list("Gabi")
+        # 'G', 'a', 'b', 'i'
+    ```
+### Funções de listas
+* `append()` => adiciona um elemento no final da lista (só é possível fazer um por vez)
+```python
+#lista vazia
+lista = []
+
+# 5 e 10 foram adiconados na lista vazia
+lista.append(5)
+lista.append(10)
+```
+* `insert(posicao, elemento)` => adiciona um lemento em uma posição específica (só é possível fazer um por vez)
+```python
+# adiconando a strinf morando na posição 2
+lista.insert(2, 'morango')
+```
+* Para redefinrir um elemento da lista individualmente:
+```python
+#redefininfo elemento da posição 2
+lista[2] = 'laranja'
+```
+* `remove()` => para remover um elemento da lista (remove apenas a primeira aparição do elemento)
+```python
+lista.remove(10)
+```
+* `pop()` => remove um elemento de determinado índice
+```python
+#removendo elemento do índice 3
+lista.pop(3)
+```
+* `sorted()` => para ordenar a lista (só funciona para listas com o mesmo tipo de dados)
+```python
+lista_numeros = [4, 5, 8, 1, 9]
+
+# para ordenar essa lista
+sorted(lista_numeros)
+```
+* Para inverter a ordem dos elementos, adicionar `[::-1]` no final da lista
+```python
+lista_numeros[::-1]
+```
+* `index()` => para mostrar qual é a posição (índice) de determinado elemento (retorna apenas a primeira aparição do elemento)
+```python
+lista_numeros = [4, 5, 8, 1, 9]
+
+# para mostrar em qual posição está o 8
+lista_numeros.index(8)
+```
+* `extend()` => para incorporar uma lista à outra
+```python
+lista1 = [1, 2, 3]
+lista2 = [4, 5, 6]
+
+# para incorporara a lista2 na lista 1
+lista1.extend(lista2)
+```
+* `clear()` => para limpar uma lista
+* `count()` => número de vezes que um determinado elemento apararece na lista
+* `copy()` => para copiar uma lista
+* **Propriedades dos elementos de lista**:
+    * `max()` => para encontrar o maior elemento
+    ```python
+    max(lista_numeros)
+    ```
+    * `min()` => para encontrar o menor elemento
+    ```python
+    min(lista_numeros)
+    ```
+    * `len()` => para encontrar o tamanho da lista (número de elementos)
+    ```python
+    len(lista_numeros)
+    ```
+    * `sum()` => para somar os elementos da lista
+    ```python
+    sum(lista_numeros)
+    ```
+    * Exemplo 1:
+    ```python
+    # média usando sum() e len()
+    media = sum(lista_numeros) / len(lista_numeros)
+    ```
+    * Exemplo 2:
+    ```python
+    num_notas = int(input('Digite o número de notas: '))
+
+    # lista de notas vazia inicializada
+    notas = []
+
+    cont = 1
+    while cont <= num_notas:
+        # pega uma nota do usuário
+        nota_atual = float(input('Digite uma nota: '))
+        notas.append(nota_atual)
+        cont += 1
+
+    media = sum(notas) / len(notas)
+    print('\nA média é: ', media)
+    ```
+## Iterador(for)
+* Laços são utilizados quando desejamos repeti operações taé que determinada condição seja atingida. Entretanto, é possível entender o `for` como sendo um operador utilizado para **percorrer elementos de uma lista** (ou qualquer objeto **iterável**). Por isso, em Python, o `for` pode ser entendido como uma **função iteradora**
+* Sua estrutura é:
+```python
+for item in lista:
+    operacao_feita_para_cada_item
+```
+* Exemplo:
+```python
+# percorre todos os elementos da lista e os mostra na tela
+lista_numeros = [4, 5, 8, 1, 9]
+for item in lista_numeros
+    print(item)
+```
+* Exemplo de uso:
+```python
+# separando números positivos e negativos de uma lista de números
+lista_num = [-10, 2, -6, 4.2, -8, 3.14, -6, 0]
+lista_num_pos = []
+lista_num_neg = []
+lista_num_neutro = []
+
+for elemento in lista_num:
+  if elemento < 0:
+    lista_num_neg.append(elemento)
+  elif elemento > 0:
+    lista_num_pos.append(elemento)
+  else:
+    lista_num_neutro.append(elemento)
+
+print(lista_num_pos)
+print(lista_num_neg)
+print(lista_num_neutro)
+```
+## Compreensão de listas
+* *list comprehension* é uma estruturna com a qual é possível construir novas listas a partir de outras listas de forma bem condensada.
+* A sintaxe é:
+```python
+[operacao_sobre_os_items for item in lista_base]
+```
+
+## Strings
+* Como já vimos string representam dados textuais e nada mais é do que uma **coleção de caracteres**
+* Para saber o tamanho de uma string:
+```python
+nome = "Gabriella"
+len(nome)
+```
+* Strings também são objetos iteráveis
+```python
+for i in nome:
+    print(i)
+
+# dá pra fazer o mesmo com o range() e o len()
+for i in range(len(nome)):
+    print(nome[i])
+```
+* Nós conseguimos alterar caracteres (ou palavras) com o método "replace()":
+```python
+nome = nome.replace('G', 'g')
+```
+* Podemos tranformar uma strinf em uma lista e fazer ela se comportar como uma
+```python
+list(nome)
+
+nome_lista = list(nome)
+```
+* Tranformando a lista de volta em string
+```python
+"".join(nome_lista)
+```
+* **Funções de strings**:
+    * `.lower()`
+    * `.upper()`
+    * `.tile()`
+    * `.capitalize()`
+    * `.split()`
+    * `.strip()`
+    * `isdigit()`
+    * `isalpha()`
+    * `isalnum()`
+    * `isspace()`  
+
+### Formatação de strings
+* Para formatar datas:
+```python
+dia, mes, ano = 7, 4, 2023
+
+"{:02d}/{:02d}/{:04d}".format(dia, mes, ano)
+```
+* Para floats:
+```python
+preco = 1299.90
+
+"{:.2f}".format(preco)
+```
+
+## Tuplas
+* São estrutura de dados e sua princial diferença entre listas é que as tuplas são **imutáveis**
+* Suas semelhanças com as listas são:
+    * Podem guardar diferentes tipos de dados
+    * São indexadas (podemos acessar elementos por índices)
+    * São iteráveis (podemos percorrer com o `for`)
+* Já que não podemos mudar nada nelas, **para que servem as tuplas?**
+    * É uma forma de sinalizar que esses dados não deveriam ser alterados
+    * É um meio de garantir que os elementos estarão em uma ordem específica
+    * O o acesso a elementos de uma tupla é bem mais rápido
+* Tuplas são inicializadas com uma sequência de valores entre parênteses
+```python
+tupla = (1, 3, "ada", False)
+```
+* Também é possível definir tuplas sem parênteses
+```python
+# tuple unpacking
+
+x, y = 2, 3
+
+# x = 2
+# y = 3
+```
+## Dicionários
+* Outra estrutura de dados importante em Python são os dicionários. Ele também é uma coleção de dados. A diferença é que um dicionário é definico por dpois elementos: uma **chave** e um **valor**
+    * A **chave** é utilizada como se fosse um índice paara identificar seus respectivos valores. Elas podem ser de qualquer tipo que é **imutável**: int, float, string, booleano, tuplas, etc
+    * O **valor** pode ser qualquer dado, um int, um float, uma str, um bool, uma lista, uma tupla, outro dicionário...
+* Dicionários são inicializados entre chaves:
+```python
+dicionario = {"chave": valor}
+```
+* **Para acesssar elementos**
+    * dicionario.values()
+    * dicionario.items()
+    * dicionario.keys()
+    * dicionario[indice]
+    * del dicionario[índice]
+    * dicionario.pop(índice)
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## Classes e objetos
 
 ### Classes

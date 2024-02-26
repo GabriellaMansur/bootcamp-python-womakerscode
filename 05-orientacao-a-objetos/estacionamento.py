@@ -20,13 +20,12 @@ class Moto:
     def sair_da_vaga(self):
         self.estacionado = False
 
-
 class Vaga:
     def __init__(self, identificador, tipo):
         self.id = identificador
         self.livre = True
 
-        if tipo is not 'carro' and tipo is not 'moto':
+        if tipo != 'carro' and tipo != 'moto':
             raise ValueError(f'O tipo de vaga {tipo} não foi reconhecido')
 
         self.tipo = tipo
@@ -37,52 +36,159 @@ class Vaga:
             raise ValueError(f'A vaga {self.identificador} já está ocupada')
 
         self.placa = placa
-        self.livre = False 
+        self.livre = False
 
-    def desocupar(self, placa):
+    def desocupar(self):
         if self.livre is True:
-            raise ValueError(f'A vaga {self.identificador} já está livre')
+            raise ValueError(f'A vaga {self.identificador} já está vazia')
 
         self.placa = None
         self.livre = True
 
-
 class Estacionamento:
-    def __init__(self, total_vagas_livres_carro, total_vagas_livres_moto):
+    def __init__(self, total_vagas_livres_carro, total_vagas_livre_moto):
         self.carro_para_vaga = {}
         self.moto_para_vaga = {}
         self.total_vagas_livres_carro = total_vagas_livres_carro
-        self.total_vagas_livres_moto = total_vagas_livres_moto
+        self.total_vagas_livres_moto = total_vagas_livre_moto
         self.inicializar_vagas()
 
     def inicializar_vagas(self):
-        self.vagas_carro = {} #id da vaga p/ o objeto de vaga de carro
+        self.vagas_carro = {} #id da vaga para o objeto de Vaga de carro
         self.vagas_moto = {}
 
         tipo = 'carro'
-        for i in range(self.total_vagas_livres_carro): # i vai de 0 a 4
-            self.vagas_carro[i] = Vaga(i, tipo) #i: é o id, tipo: é o tipo carro
+        for i in range(self.total_vagas_livres_carro):
+            self.vagas_carro[i] = Vaga(i, tipo)
 
-        primeiro_id_motos = self.total_vagas_livres_carro
+        primeiro_id_motos = self.total_vagas_livres_carro #5
         ultimo_id_motos = primeiro_id_motos + self.total_vagas_livres_moto
+
         tipo = 'moto'
         for j in range(primeiro_id_motos, ultimo_id_motos):
-            self.vagas[j] = Vaga(j, tipo)
+            self.vagas_moto[j] = Vaga(j, tipo)
 
     def estacionar_carro(self, carro: Carro):
         if carro.estacionado is True:
-            raise ValueError(f'O carro {carro.placa} já está estacionado.')
+            raise ValueError(f'O carro {carro.placa} já está estacionado')
 
-        id_da_proxima_vaga, tipo = self.burcar_ida_da_proxima_vaga_livre('carro') #gera o id da próxima vaga
+        id_da_proxima_vaga, tipo = self.buscar_id_da_proxima_vaga_livre('carro') #gera o id da proxima vaga
         if id_da_proxima_vaga is None:
-            raise ValueError(f'Não há mais gavas de carro disponíveis no estacionamento.')
-        elif id_da_proxima_vaga is not None and tipo is 'carro':
+            raise ValueError(f'Não há mais vagas de carro disponíveis no estacionamento')
+        elif id_da_proxima_vaga is not None and tipo == 'carro':
             vaga = self.vagas_carro[id_da_proxima_vaga]
             vaga.ocupar(carro.placa)
             carro.estacionar()
-            self.carro_para_vaga[carro.placa] = vaga.id #permite achar imediatamente em qual vaga está o carro
-            self.total_vagas_livres_carro -= 1 # reduz o número de vagas livres
+            self.carro_para_vaga[carro.placa] = vaga.id # permite achar em qual vaga está o carro
+            self.total_vagas_livres_carro -= 1 # reduz o número de vagas disponíveis
         else:
-            raise RuntimeError(f'Erro interno - não foi possível recuperar a próxima vaga de carro')
+            raise RuntimeError('Erro interno - não foi possível recuperar a próxima vaga de carro.')
 
         print(f'Carro {carro.placa} estacionado na vaga {vaga.id} do tipo {vaga.tipo}')
+
+    def estacionar_moto(self, moto: Moto):
+        if moto.estacionado is True:
+            raise ValueError(f'A moto {moto.placa} já está estacionada')
+
+        id_da_proxima_vaga, tipo = self.buscar_id_da_proxima_vaga_livre('moto') # gera id da proxima vaga livre
+
+        if id_da_proxima_vaga is None:
+            raise ValueError(f'Não há mais vagas disponíveis no estacionamento.')
+        elif id_da_proxima_vaga is not None and tipo == 'moto':
+            vaga = self.vagas_moto[id_da_proxima_vaga]
+            vaga.ocupar(moto.placa)
+            moto.estacionar()
+            self.moto_para_vaga[moto.placa] = vaga.id
+            self.total_vagas_livres_moto -= 1
+        elif id_da_proxima_vaga is not None and tipo == 'carro':
+            vaga = self.vagas_carro[id_da_proxima_vaga]
+            vaga.ocupar(moto.placa)
+            moto.estacionar()
+            self.moto_para_vaga[moto.placa] = vaga.id
+            self.total_vagas_livres_carro -= 1
+        else:
+            raise RuntimeError('Erro interno - não foi possível recuperar a próxima vaga de moto')
+
+        print(f'Moto {moto.placa} estacionada na vaga {vaga.id} do tipo{vaga.tipo}') 
+
+    def buscar_id_da_proxima_vaga_livre(self, tipo):
+        if tipo == 'carro':
+            if self.total_vagas_livres_carro > 0:
+                for identificador in self.vagas_carro.keys():
+                    vaga = self.vagas_carro[identificador]
+                    if vaga.livre is True:
+                        return identificador, 'carro'
+            else:
+                # não achou vaga de carro
+                return None, ''
+        elif tipo == 'moto':
+            if self.total_vagas_livres_moto > 0:
+                for identificador in self.vagas_moto.keys():
+                    vaga = self.vagas_moto[identificador]
+                    if vaga.livre is True:
+                        return identificador, 'moto'
+            if self.total_vagas_livres_carro > 0:
+                for identificador in self.vagas_carro > 0:
+                    vaga = self.vagas_carro[identificador]
+                    if vaga.livre is True:
+                        return identificador, 'carro'
+            # não achou vaga de carro nem de moto
+            return None, ''
+        else:
+            raise TypeError(f'Tipo {tipo} não reconhecido')
+        
+    def remover_carro(self, carro: Carro):
+        id_vaga = self.carro_para_vaga[carro.placa]
+        vaga = self.vagas_carro[id_vaga]
+        vaga.desocupar()
+        carro.sair_da_vaga()
+        del self.carro_para_vaga[carro.placa]
+        self.total_vagas_livres_carro += 1
+        print(f'Carro {carro.placa} retirado da vaga {vaga.id}')
+        return True
+    
+    def remover_moto(self, moto: Moto):
+        id_vaga = self.moto_para_vaga[moto.placa]
+        vaga = None
+
+        if id_vaga in self.vagas_moto:
+            vaga = self.vagas_moto[id_vaga]
+        elif id_vaga in self.vagas_carro:
+            vaga = self.vagas_carro[id_vaga]
+        else:
+            raise ValueError(f'Não foi possível encontar a vaga com identificador {id_vaga}')
+
+        moto.sair_da_vaga()
+        vaga.desocupar()
+        del self.moto_para_vaga[moto.placa]
+
+        if vaga.tipo == 'moto':
+            self.total_vagas_livres_moto += 1
+        else:
+            self.total_vagas_livres_carro += 1
+
+        print(f'Moto {moto.placa} retirada da vaga {vaga.id} (tipo {vaga.tipo})')
+
+    def estado_do_estacionamento(self):
+        num_carros_estacionados = len(self.carro_para_vaga)
+        num_motos_estacionadas = len(self.moto_para_vaga)
+        estado = '--- Estado do estacionamento --- \n'
+        estado += f' N° de carros estacionados: {num_carros_estacionados}\n'
+        estado += f' N° de motos estacionadas: {num_motos_estacionadas}\n'
+        estado += f' Total de vagas livres de carros: {self.total_vagas_livres_carro}\n'
+        estado += f' Total de vagas livres de moto: {self.total_vagas_livres_moto}'
+        estado += f' Vagas de carro:\n'
+        for i in range(len(self.vagas_carro)):
+            placa = self.vagas_carro[i].placa
+            estado += f'vaga[{i}]: placa'
+        estado += f'\n Vagas de moto:\n'
+        id_primeira_vaga_moto = len(self.vagas_carro)
+        id_ultima_vaga_moto = id_primeira_vaga_moto + len(self.vagas_moto)
+        for i in range(id_primeira_vaga_moto, id_ultima_vaga_moto):
+            placa = self.vagas_moto[i].placa
+            estado += f'vaga[{i}]: {placa}'
+        estado += '\n -----------------------------------/n'
+        return estado
+    
+    def __str__(self):
+        return self.estado_do_estacionamento()
