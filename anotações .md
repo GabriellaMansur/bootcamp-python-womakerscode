@@ -654,3 +654,4 @@ finally:
     * **Ativação:** entre dentro da pasta criada e digite  `.\Scripts\activate`
     * Depois é só ir em open folder, selecionar a pasta que criamos e abrir
     * Dentro da pasta instale o django usando o comando ``pip install django `
+    * Crirar projeto, já dentro da pasta e com o ambiente virtual ativado, `django-admin strate`
